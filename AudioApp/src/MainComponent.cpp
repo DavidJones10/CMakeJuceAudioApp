@@ -7,28 +7,30 @@ MainComponent::MainComponent()
     adm.addAudioCallback(this);
     setSize (600, 400);
     Timer::startTimerHz(60);
-    if (gpio.init(BUTTON_1,IN) == -1){
-        printf(GPIO_ERROR);
-    }
+    wiringPiSetupGpio();
+    pinMode(23, INPUT);
+    pullUpDnControl(23, PUD_DOWN);
 }
 
 MainComponent::~MainComponent(){
     adm.removeAudioCallback(this);
+   
 }
 
 //==============================================================================
 void MainComponent::paint (juce::Graphics& g)
 {
-    char state[3] = "OFF";
-    if (gpio.gpioRead(BUTTON_1))
-        state = "ON"
+    auto state= juce::String("OFF");
+    if (digitalRead(23) == HIGH){
+        state = juce::String("ON");
+    }
     // (Our component is opaque, so we must completely fill the background with a solid colour)
     g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));
 
     g.setFont (juce::FontOptions (16.0f));
     g.setColour (juce::Colours::white);
     g.drawText ("Number of callbacks", getLocalBounds(), juce::Justification::centred, true);
-    g.drawText(juce::String(state), 250, 230, 100, 40, juce::Justificaiton::centred, true);
+    g.drawText(juce::String(state), 250, 230, 100, 40, juce::Justification::centred, true);
 }   
 
 void MainComponent::resized()
@@ -47,7 +49,7 @@ void MainComponent::audioDeviceIOCallbackWithContext(const float* const* inputCh
                                         float* const* outputChannelData, int numOutputChannels, int numSamples,
                                         const AudioIODeviceCallbackContext &context){
     for (int i=0; i < numSamples; i++){
-        float sine = tick_sin();
+        float sine = tick_sin() * float(digitalRead(23));
         outputChannelData[0][i] = sine;
         outputChannelData[1][i] = sine;
     }

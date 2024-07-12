@@ -6,7 +6,7 @@
 // you could `#include <JuceHeader.h>` here instead, to make all your module headers visible.
 #include <juce_gui_extra/juce_gui_extra.h>
 #include <JuceHeader.h>
-#include "myGPIO.h"
+#include "wiringPi.h"
 
 //==============================================================================
 /*
@@ -51,7 +51,6 @@ private:
     float amplitude = 1.0f;
     float frequency = 200.f;
     juce::AudioDeviceManager adm;
-    gpioHandle gpio;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainComponent)
 };

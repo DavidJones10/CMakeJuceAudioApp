@@ -1,1 +1,5 @@
-# A template/example repo for building a JUCE GuiApp with audio using CMake.
+A template/example repo for building a JUCE GuiApp with audio and gpio using CMake. 
+
+###Libraries
+####JUCE
+####WiringPi

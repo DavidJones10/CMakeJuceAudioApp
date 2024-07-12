@@ -23,12 +23,16 @@ target_compile_definitions(AudioAppTest
         JUCE_APPLICATION_NAME_STRING="$<TARGET_PROPERTY:AudioAppTest,JUCE_PRODUCT_NAME>"
         JUCE_APPLICATION_VERSION_STRING="$<TARGET_PROPERTY:AudioAppTest,JUCE_VERSION>")
 
+find_library(WIRINGPI_LIBRARIES NAMES wiringPi)
+
 target_link_libraries(AudioAppTest
     PRIVATE
         juce::juce_audio_utils
         juce::juce_gui_extra
+        ${WIRINGPI_LIBRARIES}
     PUBLIC
         juce::juce_recommended_config_flags
         juce::juce_recommended_lto_flags
         juce::juce_recommended_warning_flags
+
 )
