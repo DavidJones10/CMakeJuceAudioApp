@@ -6,7 +6,10 @@ MainComponent::MainComponent()
     adm.initialiseWithDefaultDevices(0,2);
     adm.addAudioCallback(this);
     setSize (600, 400);
-    Timer::startTimerHz(20);
+    Timer::startTimerHz(60);
+    if (gpio.init(BUTTON_1,IN) == -1){
+        printf(GPIO_ERROR);
+    }
 }
 
 MainComponent::~MainComponent(){
@@ -16,13 +19,17 @@ MainComponent::~MainComponent(){
 //==============================================================================
 void MainComponent::paint (juce::Graphics& g)
 {
+    char state[3] = "OFF";
+    if (gpio.gpioRead(BUTTON_1))
+        state = "ON"
     // (Our component is opaque, so we must completely fill the background with a solid colour)
     g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));
 
     g.setFont (juce::FontOptions (16.0f));
     g.setColour (juce::Colours::white);
     g.drawText ("Number of callbacks", getLocalBounds(), juce::Justification::centred, true);
-}
+    g.drawText(juce::String(state), 250, 230, 100, 40, juce::Justificaiton::centred, true);
+}   
 
 void MainComponent::resized()
 {
